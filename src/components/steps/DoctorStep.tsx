@@ -126,13 +126,21 @@ export const DoctorStep = ({ onContinue, onBack }: DoctorStepProps) => {
           ))}
         </div>
       </div>
-      <div className="flex justify-between gap-3 pt-6">
-        <Button variant="outline" onClick={onBack} size="lg">
-          Voltar
-        </Button>
-        <Button onClick={handleContinue} disabled={!selectedDoctor} size="lg">
-          Continuar
-        </Button>
+      <div className="flex justify-end gap-3 pt-6">
+        <div className="flex justify-end gap-3 pt-6">
+          <Button
+            variant="ghost"
+            onClick={onBack}
+            size="lg"
+            className="text-muted-foreground hover:bg-muted"
+          >
+            Voltar
+          </Button>
+
+          <Button onClick={handleContinue} disabled={!selectedDoctor} size="lg">
+            Continuar
+          </Button>
+        </div>
       </div>
     </div>
   );

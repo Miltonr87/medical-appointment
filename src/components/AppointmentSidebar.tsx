@@ -35,34 +35,40 @@ export const AppointmentSidebar = ({
         </div>
       </div>
 
-      <nav className="space-y-3">
-        {steps.map((step) => {
+      <nav className="space-y-3 relative">
+        {steps.map((step, index) => {
           const Icon = step.icon;
           const isActive = currentStep === step.number;
           const isCompleted = currentStep > step.number;
-
+          const isLast = index === steps.length - 1;
           return (
             <div
               key={step.number}
               className={cn(
-                'flex items-center gap-3 p-3 rounded-lg transition-colors duration-200',
-                isActive && 'bg-primary/10',
-                isCompleted && 'opacity-70'
+                'flex items-start gap-3 p-3 rounded-lg transition-colors duration-200 relative',
+                isActive && 'bg-primary/10'
               )}
             >
-              <div
-                className={cn(
-                  'w-10 h-10 rounded-full flex items-center justify-center',
-                  isActive
-                    ? 'bg-primary text-primary-foreground'
-                    : 'bg-muted text-muted-foreground'
+              <div className="relative flex flex-col items-center">
+                <div
+                  className={cn(
+                    'w-10 h-10 rounded-full flex items-center justify-center z-10',
+                    isActive
+                      ? 'bg-primary text-primary-foreground'
+                      : isCompleted
+                      ? 'bg-primary text-primary-foreground'
+                      : 'bg-muted text-muted-foreground'
+                  )}
+                >
+                  <Icon size={20} weight={isActive ? 'fill' : 'regular'} />
+                </div>
+                {!isLast && (
+                  <div className="absolute top-10 left-1/2 -translate-x-1/2 w-px h-[36px] bg-border"></div>
                 )}
-              >
-                <Icon size={20} weight={isActive ? 'fill' : 'regular'} />
               </div>
               <span
                 className={cn(
-                  'text-sm',
+                  'text-sm mt-1',
                   isActive
                     ? 'text-primary font-semibold'
                     : 'text-muted-foreground'

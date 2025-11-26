@@ -151,8 +151,14 @@ export const SummaryStep = ({ onBack }: SummaryStepProps) => {
           </div>
         </div>
       </div>
-      <div className="flex justify-between gap-3 pt-6">
-        <Button variant="outline" onClick={onBack} size="lg" disabled={loading}>
+      <div className="flex justify-end gap-3 pt-6">
+        <Button
+          variant="ghost"
+          onClick={onBack}
+          size="lg"
+          disabled={loading}
+          className="text-muted-foreground hover:bg-muted"
+        >
           Voltar
         </Button>
         <Button onClick={handleConfirm} size="lg" disabled={loading}>

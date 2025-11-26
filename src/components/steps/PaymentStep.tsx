@@ -43,6 +43,7 @@ export const PaymentStep = ({ onContinue, onBack }: PaymentStepProps) => {
           Selecione a forma de pagamento
         </h2>
       </div>
+
       <div className="space-y-3 max-w-md">
         {paymentMethods.map((method) => {
           const Icon = method.icon;
@@ -74,10 +75,16 @@ export const PaymentStep = ({ onContinue, onBack }: PaymentStepProps) => {
           );
         })}
       </div>
-      <div className="flex justify-between gap-3 pt-6">
-        <Button variant="outline" onClick={onBack} size="lg">
+      <div className="flex justify-end gap-3 pt-6">
+        <Button
+          variant="ghost"
+          onClick={onBack}
+          size="lg"
+          className="text-muted-foreground hover:bg-muted"
+        >
           Voltar
         </Button>
+
         <Button onClick={handleContinue} disabled={!selected} size="lg">
           Continuar
         </Button>
