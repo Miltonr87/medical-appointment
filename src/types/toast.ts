@@ -1,0 +1,1 @@
+export interface ToastOpts { title?: string; description?: string; variant?: 'default'|'destructive'; }
