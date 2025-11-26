@@ -1,48 +1,38 @@
 import { create } from "zustand";
+import { devtools } from "zustand/middleware";
 import type { AppointmentState } from "../types/appointment.types";
 
-const logger =
-  (config) =>
-    (set, get, api) =>
-      config(
-        (...args) => {
-          console.log("🟨 Action Payload →", args[0]);
-          set(...args);
-          console.log("🟩 New state →", get());
-        },
-        get,
-        api
-      );
-
 export const useAppointmentStore = create<AppointmentState>()(
-  logger((set) => ({
-    date: null,
-    time: null,
-    clinic: null,
-    doctor: null,
-    paymentMethod: null,
-    currentStep: 1,
-
-    setScheduling: (date, time, clinic) =>
-      set({ date, time, clinic }),
-
-    setDoctor: (doctor) =>
-      set({ doctor }),
-
-    setPaymentMethod: (method) =>
-      set({ paymentMethod: method }),
-
-    setCurrentStep: (step) =>
-      set({ currentStep: step }),
-
-    reset: () =>
-      set({
-        date: null,
-        time: null,
-        clinic: null,
-        doctor: null,
-        paymentMethod: null,
-        currentStep: 1,
-      }),
-  }))
+  devtools(
+    (set) => ({
+      date: null,
+      time: null,
+      clinic: null,
+      doctor: null,
+      paymentMethod: null,
+      currentStep: 1,
+      setScheduling: (date, time, clinic) =>
+        set({ date, time, clinic }, false, "appointment/setScheduling"),
+      setDoctor: (doctor) =>
+        set({ doctor }, false, "appointment/setDoctor"),
+      setPaymentMethod: (method) =>
+        set({ paymentMethod: method }, false, "appointment/setPaymentMethod"),
+      setCurrentStep: (step) =>
+        set({ currentStep: step }, false, "appointment/setCurrentStep"),
+      reset: () =>
+        set(
+          {
+            date: null,
+            time: null,
+            clinic: null,
+            doctor: null,
+            paymentMethod: null,
+            currentStep: 1,
+          },
+          false,
+          "appointment/reset"
+        ),
+    }),
+    { name: "Appointment Store" }
+  )
 );
