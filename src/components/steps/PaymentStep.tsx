@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { ScanIcon, CreditCardIcon, MoneyIcon } from '@phosphor-icons/react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { useAppointmentStore } from '@/store/appointmentStore';
+import { usePaymentStep } from '@/hooks/appointment/usePaymentStep';
 
 interface PaymentStepProps {
   onContinue: () => void;
@@ -21,7 +21,7 @@ export const PaymentStep = ({ onContinue, onBack }: PaymentStepProps) => {
   const [selected, setSelected] = useState<
     'pix' | 'credit-card' | 'cash' | undefined
   >();
-  const { paymentMethod, setPaymentMethod } = useAppointmentStore();
+  const { paymentMethod, setPaymentMethod } = usePaymentStep();
 
   useEffect(() => {
     if (paymentMethod) {
@@ -43,7 +43,6 @@ export const PaymentStep = ({ onContinue, onBack }: PaymentStepProps) => {
           Selecione a forma de pagamento
         </h2>
       </div>
-
       <div className="space-y-3 max-w-md">
         {paymentMethods.map((method) => {
           const Icon = method.icon;
@@ -84,7 +83,6 @@ export const PaymentStep = ({ onContinue, onBack }: PaymentStepProps) => {
         >
           Voltar
         </Button>
-
         <Button onClick={handleContinue} disabled={!selected} size="lg">
           Continuar
         </Button>

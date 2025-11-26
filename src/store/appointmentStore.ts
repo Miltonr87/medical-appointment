@@ -2,11 +2,11 @@ import { create } from 'zustand';
 import type { AppointmentState } from '../types/appointment.types';
 
 export const useAppointmentStore = create<AppointmentState>((set) => ({
-  date: undefined,
-  time: '',
-  clinic: undefined,
-  doctor: undefined,
-  paymentMethod: undefined,
+  date: null,
+  time: null,
+  clinic: null,
+  doctor: null,
+  paymentMethod: null,
   currentStep: 1,
 
   setScheduling: (date, time, clinic) =>
@@ -23,11 +23,11 @@ export const useAppointmentStore = create<AppointmentState>((set) => ({
 
   reset: () =>
     set({
-      date: undefined,
-      time: '',
-      clinic: undefined,
-      doctor: undefined,
-      paymentMethod: undefined,
+      date: null,
+      time: null,
+      clinic: null,
+      doctor: null,
+      paymentMethod: null,
       currentStep: 1,
     }),
 }));

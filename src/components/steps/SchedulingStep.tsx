@@ -15,7 +15,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import { mockApi } from '@/lib/mockApi';
-import { Clinic, useAppointmentStore } from '@/store/appointmentStore';
+import { Clinic } from '@/types/appointment.types';
+import { useSchedulingStep } from '@/hooks/appointment/useSchedulingStep';
 
 const schedulingSchema = z.object({
   date: z.string().min(1, 'Selecione uma data'),
@@ -32,9 +33,7 @@ export const SchedulingStep = ({ onContinue }: SchedulingStepProps) => {
   const [clinics, setClinics] = useState<Clinic[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedClinic, setSelectedClinic] = useState<Clinic | undefined>();
-
-  const { date, time, clinic, setScheduling } = useAppointmentStore();
-
+  const { date, time, clinic, setScheduling } = useSchedulingStep();
   const {
     register,
     watch,
@@ -49,7 +48,6 @@ export const SchedulingStep = ({ onContinue }: SchedulingStepProps) => {
       clinicId: clinic?.id || '',
     },
   });
-
   const watchDate = watch('date');
   const watchTime = watch('time');
   const watchClinicId = watch('clinicId');
@@ -69,8 +67,8 @@ export const SchedulingStep = ({ onContinue }: SchedulingStepProps) => {
 
   useEffect(() => {
     if (watchClinicId) {
-      const clinic = clinics.find((c) => c.id === watchClinicId);
-      setSelectedClinic(clinic);
+      const foundClinic = clinics.find((c) => c.id === watchClinicId);
+      setSelectedClinic(foundClinic);
     }
   }, [watchClinicId, clinics]);
 
@@ -94,6 +92,7 @@ export const SchedulingStep = ({ onContinue }: SchedulingStepProps) => {
           <Label htmlFor="date" className="text-sm font-medium mb-2 block">
             Quando será a sua consulta?
           </Label>
+
           <div className="relative">
             <CalendarBlankIcon
               className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
@@ -107,12 +106,14 @@ export const SchedulingStep = ({ onContinue }: SchedulingStepProps) => {
               min={new Date().toISOString().split('T')[0]}
             />
           </div>
+
           {errors.date && (
             <p className="text-sm text-destructive mt-1">
               {errors.date.message}
             </p>
           )}
         </div>
+
         <div>
           <div className="relative">
             <ClockIcon
@@ -126,14 +127,17 @@ export const SchedulingStep = ({ onContinue }: SchedulingStepProps) => {
               className="pl-10"
             />
           </div>
+
           {errors.time && (
             <p className="text-sm text-destructive mt-1">
               {errors.time.message}
             </p>
           )}
         </div>
+
         <div>
           <Label className="text-sm font-medium mb-3 block">Onde?</Label>
+
           {!watchDate || !watchTime ? (
             <div className="text-sm text-muted-foreground">
               Selecione data e horário para ver clínicas disponíveis
@@ -178,6 +182,7 @@ export const SchedulingStep = ({ onContinue }: SchedulingStepProps) => {
               ))}
             </div>
           )}
+
           {errors.clinicId && (
             <p className="text-sm text-destructive mt-1">
               {errors.clinicId.message}
@@ -185,6 +190,7 @@ export const SchedulingStep = ({ onContinue }: SchedulingStepProps) => {
           )}
         </div>
       </div>
+
       <div className="flex justify-end gap-3 pt-6">
         <Button onClick={handleContinue} disabled={!isValid} size="lg">
           Continuar

@@ -9,10 +9,10 @@ import {
   CircleNotchIcon,
 } from '@phosphor-icons/react';
 import { Button } from '@/components/ui/button';
-import { useAppointmentStore } from '@/store/appointmentStore';
 import { mockApi } from '@/lib/mockApi';
 import { useRouter } from 'next/navigation';
 import { toast } from '@/hooks/use-toast';
+import { useSummaryStep } from '@/hooks/appointment/useSummaryStep';
 
 interface SummaryStepProps {
   onBack: () => void;
@@ -27,11 +27,9 @@ const paymentMethodLabels = {
 export const SummaryStep = ({ onBack }: SummaryStepProps) => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const { date, time, clinic, doctor, paymentMethod } = useAppointmentStore();
-
+  const { date, time, clinic, doctor, paymentMethod } = useSummaryStep();
   const formatPrice = (price: number) =>
     `R$ ${(price / 100).toFixed(2).replace('.', ',')}`;
-
   const handleConfirm = async () => {
     setLoading(true);
     try {
@@ -42,7 +40,6 @@ export const SummaryStep = ({ onBack }: SummaryStepProps) => {
         doctor,
         paymentMethod,
       });
-
       if (result.success) {
         router.push('/success');
       }
@@ -125,7 +122,6 @@ export const SummaryStep = ({ onBack }: SummaryStepProps) => {
             <p className="font-semibold text-foreground">{doctor.name}.</p>
           </div>
         </div>
-
         <div className="flex items-start gap-4 p-4 rounded-lg bg-muted/30">
           <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
             <MapPinIcon size={20} className="text-primary" />

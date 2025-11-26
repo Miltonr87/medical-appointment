@@ -5,7 +5,8 @@ import { CircleNotchIcon, CaretRightIcon } from '@phosphor-icons/react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { mockApi } from '@/lib/mockApi';
-import { Doctor, useAppointmentStore } from '@/store/appointmentStore';
+import { Doctor } from '@/types/appointment.types';
+import { useDoctorStep } from '@/hooks/appointment/useDoctorStep';
 
 interface DoctorStepProps {
   onContinue: () => void;
@@ -17,8 +18,7 @@ export const DoctorStep = ({ onContinue, onBack }: DoctorStepProps) => {
   const [recommendedDoctors, setRecommendedDoctors] = useState<Doctor[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | undefined>();
-
-  const { doctor, setDoctor } = useAppointmentStore();
+  const { doctor, setDoctor } = useDoctorStep();
 
   useEffect(() => {
     const loadDoctors = async () => {
@@ -127,20 +127,17 @@ export const DoctorStep = ({ onContinue, onBack }: DoctorStepProps) => {
         </div>
       </div>
       <div className="flex justify-end gap-3 pt-6">
-        <div className="flex justify-end gap-3 pt-6">
-          <Button
-            variant="ghost"
-            onClick={onBack}
-            size="lg"
-            className="text-muted-foreground hover:bg-muted"
-          >
-            Voltar
-          </Button>
-
-          <Button onClick={handleContinue} disabled={!selectedDoctor} size="lg">
-            Continuar
-          </Button>
-        </div>
+        <Button
+          variant="ghost"
+          onClick={onBack}
+          size="lg"
+          className="text-muted-foreground hover:bg-muted"
+        >
+          Voltar
+        </Button>
+        <Button onClick={handleContinue} disabled={!selectedDoctor} size="lg">
+          Continuar
+        </Button>
       </div>
     </div>
   );

@@ -63,7 +63,7 @@ export const AppointmentSidebar = ({
                   <Icon size={20} weight={isActive ? 'fill' : 'regular'} />
                 </div>
                 {!isLast && (
-                  <div className="absolute top-10 left-1/2 -translate-x-1/2 w-px h-[36px] bg-border"></div>
+                  <div className="absolute top-10 left-1/2 -translate-x-1/2 w-px bg-border"></div>
                 )}
               </div>
               <span
