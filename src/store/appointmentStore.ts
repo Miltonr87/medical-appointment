@@ -1,33 +1,48 @@
-import { create } from 'zustand';
-import type { AppointmentState } from '../types/appointment.types';
+import { create } from "zustand";
+import type { AppointmentState } from "../types/appointment.types";
 
-export const useAppointmentStore = create<AppointmentState>((set) => ({
-  date: null,
-  time: null,
-  clinic: null,
-  doctor: null,
-  paymentMethod: null,
-  currentStep: 1,
+const logger =
+  (config) =>
+    (set, get, api) =>
+      config(
+        (...args) => {
+          console.log("🟨 Action Payload →", args[0]);
+          set(...args);
+          console.log("🟩 New state →", get());
+        },
+        get,
+        api
+      );
 
-  setScheduling: (date, time, clinic) =>
-    set({ date, time, clinic }),
+export const useAppointmentStore = create<AppointmentState>()(
+  logger((set) => ({
+    date: null,
+    time: null,
+    clinic: null,
+    doctor: null,
+    paymentMethod: null,
+    currentStep: 1,
 
-  setDoctor: (doctor) =>
-    set({ doctor }),
+    setScheduling: (date, time, clinic) =>
+      set({ date, time, clinic }),
 
-  setPaymentMethod: (method) =>
-    set({ paymentMethod: method }),
+    setDoctor: (doctor) =>
+      set({ doctor }),
 
-  setCurrentStep: (step) =>
-    set({ currentStep: step }),
+    setPaymentMethod: (method) =>
+      set({ paymentMethod: method }),
 
-  reset: () =>
-    set({
-      date: null,
-      time: null,
-      clinic: null,
-      doctor: null,
-      paymentMethod: null,
-      currentStep: 1,
-    }),
-}));
+    setCurrentStep: (step) =>
+      set({ currentStep: step }),
+
+    reset: () =>
+      set({
+        date: null,
+        time: null,
+        clinic: null,
+        doctor: null,
+        paymentMethod: null,
+        currentStep: 1,
+      }),
+  }))
+);
