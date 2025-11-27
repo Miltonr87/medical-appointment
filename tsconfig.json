@@ -1,52 +1,33 @@
 {
-  "files": [],
-  "references": [
-    {
-      "path": "./tsconfig.app.json"
-    },
-    {
-      "path": "./tsconfig.node.json"
-    }
-  ],
   "compilerOptions": {
-    /* 🔧 Resolução moderna (necessária para Tailwind 4 e libs ESM) */
-    "moduleResolution": "bundler",
-    "module": "esnext",
+    "moduleResolution": "Bundler",
+    "module": "ESNext",
     "target": "ES2022",
-    /* 🧠 Integração Next.js + TypeScript */
     "jsx": "preserve",
     "incremental": true,
     "noEmit": true,
     "isolatedModules": true,
-    "esModuleInterop": true,
     "resolveJsonModule": true,
-    /* 🧩 Base path e aliases */
+    "esModuleInterop": true,
     "baseUrl": ".",
     "paths": {
       "@/*": [
         "./src/*"
       ]
     },
-    /* ⚙️ Regras de compilação relaxadas */
     "skipLibCheck": true,
-    "noImplicitAny": false,
-    "noUnusedParameters": false,
-    "noUnusedLocals": false,
-    "strictNullChecks": false,
-    "strict": false,
-    "allowJs": true,
-    /* 📚 Bibliotecas padrão */
+    "allowJs": false,
     "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
+      "DOM",
+      "DOM.Iterable",
+      "ES2022"
     ],
-    /* 🧩 Plugin Next.js */
     "plugins": [
       {
         "name": "next"
       }
-    ]
+    ],
+    "strict": false
   },
   "include": [
     "next-env.d.ts",
