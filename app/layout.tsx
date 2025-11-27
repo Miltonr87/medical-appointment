@@ -4,6 +4,10 @@ import './globals.css';
 
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { Toaster } from '@/components/ui/toaster';
+import { ReactQueryProvider } from './ReactQueryProvider';
+
+// Toastify (Sonner)
+import { Toaster as Sonner } from '@/components/ui/sonner';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -14,16 +18,19 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="pt-BR">
       <body className={inter.className}>
-        <TooltipProvider>
-          {children}
-          <Toaster />
-        </TooltipProvider>
+        <ReactQueryProvider>
+          <TooltipProvider>
+            {children}
+            <Sonner />
+            <Toaster />
+          </TooltipProvider>
+        </ReactQueryProvider>
       </body>
     </html>
   );
