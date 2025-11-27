@@ -5,14 +5,12 @@ import Success from '../page';
 const resetMock = vi.fn();
 const pushMock = vi.fn();
 
-// Mock router
 vi.mock('next/navigation', () => ({
   useRouter: () => ({
     push: pushMock,
   }),
 }));
 
-// Mock Zustand store
 vi.mock('@/store/appointmentStore', () => ({
   useAppointmentStore: (selector: any) =>
     selector({
