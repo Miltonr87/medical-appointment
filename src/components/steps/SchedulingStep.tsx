@@ -16,7 +16,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
-
 import { useSchedulingStep } from '@/hooks/appointment/useSchedulingStep';
 
 const schedulingSchema = z.object({
@@ -27,7 +26,6 @@ const schedulingSchema = z.object({
 
 interface SchedulingStepProps {
   onContinue: () => void;
-  onBack?: () => void;
 }
 
 export const SchedulingStep = ({ onContinue }: SchedulingStepProps) => {
@@ -71,7 +69,7 @@ export const SchedulingStep = ({ onContinue }: SchedulingStepProps) => {
     if (watchClinicId) {
       updateSelectedClinic(watchClinicId);
     }
-  }, [watchClinicId, clinics, updateSelectedClinic]);
+  }, [watchClinicId, updateSelectedClinic]);
 
   return (
     <div className="space-y-8">
