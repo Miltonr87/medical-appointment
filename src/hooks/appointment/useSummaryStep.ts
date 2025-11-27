@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { mockApi } from '@/lib/mockApi';
 import { toast } from '@/hooks/use-toast';
@@ -7,6 +7,7 @@ import { useAppointmentStore } from '@/store/appointmentStore';
 export const useSummaryStep = () => {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
+
     const date = useAppointmentStore((s) => s.date);
     const time = useAppointmentStore((s) => s.time);
     const clinic = useAppointmentStore((s) => s.clinic);
@@ -14,22 +15,25 @@ export const useSummaryStep = () => {
     const paymentMethod = useAppointmentStore((s) => s.paymentMethod);
     const reset = useAppointmentStore((s) => s.reset);
 
+    const isReady = useMemo(
+        () => !!date && !!time && !!clinic && !!doctor && !!paymentMethod,
+        [date, time, clinic, doctor, paymentMethod]
+    );
+
     const handleConfirm = async () => {
-        if (!date || !time || !clinic || !doctor || !paymentMethod) return;
-
+        if (!isReady) return;
         setLoading(true);
-
         try {
             const result = await mockApi.confirmAppointment({
                 date,
                 time,
-                clinicId: clinic.id,
-                doctorId: doctor.id,
+                clinicId: clinic!.id,
+                doctorId: doctor!.id,
                 paymentMethod,
             });
-
             if (result.success) {
                 router.push('/success');
+                return;
             }
         } catch {
             toast({
@@ -48,8 +52,9 @@ export const useSummaryStep = () => {
         clinic,
         doctor,
         paymentMethod,
-        reset,
+        isReady,
         loading,
         handleConfirm,
+        reset,
     };
 };

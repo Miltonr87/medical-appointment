@@ -7,6 +7,7 @@ import {
   CreditCardIcon,
   CircleNotchIcon,
 } from '@phosphor-icons/react';
+
 import { paymentMethodLabels } from '@/constants/payment-method-labels';
 import { Button } from '@/components/ui/button';
 import { useSummaryStep } from '@/hooks/appointment/useSummaryStep';
@@ -18,12 +19,20 @@ interface SummaryStepProps {
 }
 
 export const SummaryStep = ({ onBack }: SummaryStepProps) => {
-  const { date, time, clinic, doctor, paymentMethod, loading, handleConfirm } =
-    useSummaryStep();
+  const {
+    date,
+    time,
+    clinic,
+    doctor,
+    paymentMethod,
+    isReady,
+    loading,
+    handleConfirm,
+  } = useSummaryStep();
 
-  if (!date || !time || !clinic || !doctor || !paymentMethod) return null;
+  if (!isReady) return null;
 
-  const { formatted: formattedDate, dayOfWeek } = formatDate(new Date(date));
+  const { formatted: formattedDate, dayOfWeek } = formatDate(new Date(date!));
 
   return (
     <div className="space-y-8">
@@ -56,7 +65,7 @@ export const SummaryStep = ({ onBack }: SummaryStepProps) => {
           </div>
           <div>
             <p className="text-sm text-muted-foreground mb-1">Com a pediatra</p>
-            <p className="font-semibold text-foreground">{doctor.name}.</p>
+            <p className="font-semibold text-foreground">{doctor!.name}.</p>
           </div>
         </div>
         <div className="flex items-start gap-4 p-4 rounded-lg bg-muted/30">
@@ -65,7 +74,7 @@ export const SummaryStep = ({ onBack }: SummaryStepProps) => {
           </div>
           <div>
             <p className="text-sm text-muted-foreground mb-1">
-              Na {clinic.name}
+              Na {clinic!.name}
             </p>
           </div>
         </div>
@@ -77,9 +86,9 @@ export const SummaryStep = ({ onBack }: SummaryStepProps) => {
             <p className="text-sm text-muted-foreground mb-1">
               Valor da consulta{' '}
               <span className="font-semibold text-foreground">
-                {formatPrice(doctor.price)}
+                {formatPrice(doctor!.price)}
               </span>
-              , no {paymentMethodLabels[paymentMethod]}.
+              , no {paymentMethodLabels[paymentMethod!]}.
             </p>
           </div>
         </div>
