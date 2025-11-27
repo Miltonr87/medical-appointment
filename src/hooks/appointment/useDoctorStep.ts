@@ -31,14 +31,11 @@ export const useDoctorStep = () => {
     };
 
     return {
-        // store info
         doctor,
-        // ui state
         searchDoctors,
         recommendedDoctors,
         loadingDoctors,
         selectedDoctor,
-        // actions
         loadDoctors,
         setSelectedDoctor,
         handleContinue,

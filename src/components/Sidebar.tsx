@@ -9,7 +9,7 @@ import {
 } from '@phosphor-icons/react';
 import { cn } from '@/lib/utils';
 
-interface AppointmentSidebarProps {
+interface SidebarProps {
   currentStep: number;
 }
 
@@ -20,9 +20,7 @@ const steps = [
   { number: 4, label: 'Resumo', icon: FileTextIcon },
 ];
 
-export const AppointmentSidebar = ({
-  currentStep,
-}: AppointmentSidebarProps) => {
+export const Sidebar = ({ currentStep }: SidebarProps) => {
   return (
     <aside className="w-[337px] bg-card border-r border-border min-h-screen sticky top-0 p-6 flex flex-col">
       <div className="flex items-center gap-3 mb-8">
@@ -34,7 +32,6 @@ export const AppointmentSidebar = ({
           <p className="font-semibold text-primary">John Doe</p>
         </div>
       </div>
-
       <nav className="space-y-3 relative">
         {steps.map((step, index) => {
           const Icon = step.icon;

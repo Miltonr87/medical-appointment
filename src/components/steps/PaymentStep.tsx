@@ -1,40 +1,17 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { ScanIcon, CreditCardIcon, MoneyIcon } from '@phosphor-icons/react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { usePaymentStep } from '@/hooks/appointment/usePaymentStep';
+import { paymentMethods } from '@/constants/payment-methods';
 
 interface PaymentStepProps {
   onContinue: () => void;
   onBack: () => void;
 }
 
-const paymentMethods = [
-  { id: 'pix', label: 'Pix', icon: ScanIcon },
-  { id: 'credit-card', label: 'Cartão de crédito', icon: CreditCardIcon },
-  { id: 'cash', label: 'Dinheiro', icon: MoneyIcon },
-] as const;
-
 export const PaymentStep = ({ onContinue, onBack }: PaymentStepProps) => {
-  const [selected, setSelected] = useState<
-    'pix' | 'credit-card' | 'cash' | undefined
-  >();
-  const { paymentMethod, setPaymentMethod } = usePaymentStep();
-
-  useEffect(() => {
-    if (paymentMethod) {
-      setSelected(paymentMethod);
-    }
-  }, [paymentMethod]);
-
-  const handleContinue = () => {
-    if (selected) {
-      setPaymentMethod(selected);
-      onContinue();
-    }
-  };
+  const { selectedMethod, selectMethod, handleContinue } = usePaymentStep();
 
   return (
     <div className="space-y-8">
@@ -49,10 +26,10 @@ export const PaymentStep = ({ onContinue, onBack }: PaymentStepProps) => {
           return (
             <button
               key={method.id}
-              onClick={() => setSelected(method.id)}
+              onClick={() => selectMethod(method.id)}
               className={cn(
                 'w-full p-4 rounded-lg border-2 transition-all text-left flex items-center gap-3',
-                selected === method.id
+                selectedMethod === method.id
                   ? 'border-primary bg-primary/5'
                   : 'border-border hover:border-primary/50'
               )}
@@ -60,7 +37,7 @@ export const PaymentStep = ({ onContinue, onBack }: PaymentStepProps) => {
               <div
                 className={cn(
                   'w-10 h-10 rounded-lg flex items-center justify-center',
-                  selected === method.id
+                  selectedMethod === method.id
                     ? 'bg-primary/10 text-primary'
                     : 'bg-muted text-muted-foreground'
                 )}
@@ -83,7 +60,11 @@ export const PaymentStep = ({ onContinue, onBack }: PaymentStepProps) => {
         >
           Voltar
         </Button>
-        <Button onClick={handleContinue} disabled={!selected} size="lg">
+        <Button
+          onClick={() => handleContinue(onContinue)}
+          disabled={!selectedMethod}
+          size="lg"
+        >
           Continuar
         </Button>
       </div>

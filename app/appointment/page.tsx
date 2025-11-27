@@ -1,6 +1,6 @@
 'use client';
 
-import { AppointmentSidebar } from '@/components/AppointmentSidebar';
+import { Sidebar } from '@/components/Sidebar';
 import { SchedulingStep } from '@/components/steps/SchedulingStep';
 import { DoctorStep } from '@/components/steps/DoctorStep';
 import { PaymentStep } from '@/components/steps/PaymentStep';
@@ -15,7 +15,7 @@ export default function Appointment() {
 
   return (
     <div className="min-h-screen bg-background flex">
-      <AppointmentSidebar currentStep={currentStep} />
+      <Sidebar currentStep={currentStep} />
       <main className="flex-1 p-8 md:p-12 flex justify-center">
         <div className="w-full max-w-[878px]">
           {currentStep === 1 && <SchedulingStep onContinue={handleContinue} />}
