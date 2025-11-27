@@ -3,7 +3,6 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 
 import {
   CalendarBlankIcon,
@@ -11,18 +10,12 @@ import {
   MapPinIcon,
   CircleNotchIcon,
 } from '@phosphor-icons/react';
-
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import { useSchedulingStep } from '@/hooks/appointment/useSchedulingStep';
-
-const schedulingSchema = z.object({
-  date: z.string().min(1, 'Selecione uma data'),
-  time: z.string().min(1, 'Selecione um horário'),
-  clinicId: z.string().min(1, 'Selecione uma clínica'),
-});
+import { schedulingSchema } from '@/constants/scheduling-schema';
 
 interface SchedulingStepProps {
   onContinue: () => void;
@@ -83,6 +76,7 @@ export const SchedulingStep = ({ onContinue }: SchedulingStepProps) => {
           <Label htmlFor="date" className="text-sm font-medium mb-2 block">
             Quando será a sua consulta?
           </Label>
+
           <div className="relative">
             <CalendarBlankIcon
               className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
