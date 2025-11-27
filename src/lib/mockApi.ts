@@ -3,12 +3,18 @@ import { Clinic, Doctor, PaymentMethod } from '@/types/appointment.types';
 const delay = (ms: number) =>
   new Promise(resolve => setTimeout(resolve, ms));
 
+const randomFail = () => Math.random() < 0.15;
+
 const clinicImage =
   'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=400&h=300&fit=crop';
 
 export const mockApi = {
   async getClinics(): Promise<Clinic[]> {
     await delay(1200);
+
+    if (randomFail()) {
+      throw new Error('Erro ao carregar clínicas.');
+    }
 
     return [
       {
@@ -33,6 +39,10 @@ export const mockApi = {
     recommended: Doctor[];
   }> {
     await delay(1000);
+
+    if (randomFail()) {
+      throw new Error('Erro ao buscar médicos.');
+    }
 
     const doctors: Doctor[] = [
       {
@@ -71,18 +81,27 @@ export const mockApi = {
     };
   },
 
-  async confirmAppointment(_data: {
+  async confirmAppointment(data: {
     date: Date;
     time: string;
     clinicId: string;
     doctorId: string;
     paymentMethod: PaymentMethod;
-  }): Promise<{ success: boolean; appointmentId: string }> {
+  }): Promise<{
+    success: boolean;
+    appointmentId: string;
+    payload: typeof data;
+  }> {
     await delay(800);
+
+    if (randomFail()) {
+      throw new Error('Falha ao confirmar agendamento.');
+    }
 
     return {
       success: true,
       appointmentId: crypto.randomUUID().slice(0, 8).toUpperCase(),
+      payload: data,
     };
   },
 };
