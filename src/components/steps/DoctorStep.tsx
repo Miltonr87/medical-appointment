@@ -1,12 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { CircleNotchIcon, CaretRightIcon } from '@phosphor-icons/react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { mockApi } from '@/lib/mockApi';
-import { Doctor } from '@/types/appointment.types';
 import { useDoctorStep } from '@/hooks/appointment/useDoctorStep';
+import { formatPrice } from '@/utils/format-price';
+import type { Doctor } from '@/types/appointment.types';
 
 interface DoctorStepProps {
   onContinue: () => void;
@@ -14,37 +14,19 @@ interface DoctorStepProps {
 }
 
 export const DoctorStep = ({ onContinue, onBack }: DoctorStepProps) => {
-  const [searchDoctors, setSearchDoctors] = useState<Doctor[]>([]);
-  const [recommendedDoctors, setRecommendedDoctors] = useState<Doctor[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [selectedDoctor, setSelectedDoctor] = useState<Doctor | undefined>();
-  const { doctor, setDoctor } = useDoctorStep();
+  const {
+    searchDoctors,
+    recommendedDoctors,
+    loadingDoctors,
+    selectedDoctor,
+    loadDoctors,
+    setSelectedDoctor,
+    handleContinue,
+  } = useDoctorStep();
 
   useEffect(() => {
-    const loadDoctors = async () => {
-      setLoading(true);
-      const data = await mockApi.getDoctors();
-      setSearchDoctors(data.search);
-      setRecommendedDoctors(data.recommended);
-      setLoading(false);
-    };
-
     loadDoctors();
-  }, []);
-
-  useEffect(() => {
-    if (doctor) setSelectedDoctor(doctor);
-  }, [doctor]);
-
-  const handleContinue = () => {
-    if (selectedDoctor) {
-      setDoctor(selectedDoctor);
-      onContinue();
-    }
-  };
-
-  const formatPrice = (price: number) =>
-    `R$ ${(price / 100).toFixed(2).replace('.', ',')}`;
+  }, [loadDoctors]);
 
   const DoctorCard = ({ doctor }: { doctor: Doctor }) => (
     <button
@@ -78,7 +60,7 @@ export const DoctorStep = ({ onContinue, onBack }: DoctorStepProps) => {
     </button>
   );
 
-  if (loading) {
+  if (loadingDoctors) {
     return (
       <div className="flex items-center justify-center py-20">
         <div className="text-center space-y-3">
@@ -100,13 +82,12 @@ export const DoctorStep = ({ onContinue, onBack }: DoctorStepProps) => {
             Baseados em sua pesquisa
           </h3>
           <button className="text-sm text-primary hover:underline flex items-center gap-1">
-            Ver mais
-            <CaretRightIcon size={16} />
+            Ver mais <CaretRightIcon size={16} />
           </button>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {searchDoctors.map((doctor) => (
-            <DoctorCard key={doctor.id} doctor={doctor} />
+          {searchDoctors.map((doc) => (
+            <DoctorCard key={doc.id} doctor={doc} />
           ))}
         </div>
       </div>
@@ -116,13 +97,12 @@ export const DoctorStep = ({ onContinue, onBack }: DoctorStepProps) => {
             Médicos recomendados
           </h3>
           <button className="text-sm text-primary hover:underline flex items-center gap-1">
-            Ver mais
-            <CaretRightIcon size={16} />
+            Ver mais <CaretRightIcon size={16} />
           </button>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {recommendedDoctors.map((doctor) => (
-            <DoctorCard key={doctor.id} doctor={doctor} />
+          {recommendedDoctors.map((doc) => (
+            <DoctorCard key={doc.id} doctor={doc} />
           ))}
         </div>
       </div>
@@ -135,7 +115,11 @@ export const DoctorStep = ({ onContinue, onBack }: DoctorStepProps) => {
         >
           Voltar
         </Button>
-        <Button onClick={handleContinue} disabled={!selectedDoctor} size="lg">
+        <Button
+          onClick={() => handleContinue(onContinue)}
+          disabled={!selectedDoctor}
+          size="lg"
+        >
           Continuar
         </Button>
       </div>
