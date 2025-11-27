@@ -1,21 +1,22 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+
 import {
   CalendarBlankIcon,
   ClockIcon,
   MapPinIcon,
   CircleNotchIcon,
 } from '@phosphor-icons/react';
+
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
-import { mockApi } from '@/lib/mockApi';
-import { Clinic } from '@/types/appointment.types';
+
 import { useSchedulingStep } from '@/hooks/appointment/useSchedulingStep';
 
 const schedulingSchema = z.object({
@@ -30,10 +31,17 @@ interface SchedulingStepProps {
 }
 
 export const SchedulingStep = ({ onContinue }: SchedulingStepProps) => {
-  const [clinics, setClinics] = useState<Clinic[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [selectedClinic, setSelectedClinic] = useState<Clinic | undefined>();
-  const { date, time, clinic, setScheduling } = useSchedulingStep();
+  const {
+    date,
+    time,
+    clinics,
+    loadingClinics,
+    selectedClinic,
+    loadClinics,
+    updateSelectedClinic,
+    handleContinue,
+  } = useSchedulingStep();
+
   const {
     register,
     watch,
@@ -45,39 +53,25 @@ export const SchedulingStep = ({ onContinue }: SchedulingStepProps) => {
     defaultValues: {
       date: date ? new Date(date).toISOString().split('T')[0] : '',
       time: time || '',
-      clinicId: clinic?.id || '',
+      clinicId: selectedClinic?.id || '',
     },
   });
+
   const watchDate = watch('date');
   const watchTime = watch('time');
   const watchClinicId = watch('clinicId');
 
   useEffect(() => {
-    const loadClinics = async () => {
-      setLoading(true);
-      const data = await mockApi.getClinics();
-      setClinics(data);
-      setLoading(false);
-    };
-
     if (watchDate && watchTime) {
-      loadClinics();
+      loadClinics(watchDate, watchTime);
     }
-  }, [watchDate, watchTime]);
+  }, [watchDate, watchTime, loadClinics]);
 
   useEffect(() => {
     if (watchClinicId) {
-      const foundClinic = clinics.find((c) => c.id === watchClinicId);
-      setSelectedClinic(foundClinic);
+      updateSelectedClinic(watchClinicId);
     }
-  }, [watchClinicId, clinics]);
-
-  const handleContinue = () => {
-    if (isValid && selectedClinic && watchDate && watchTime) {
-      setScheduling(new Date(watchDate), watchTime, selectedClinic);
-      onContinue();
-    }
-  };
+  }, [watchClinicId, clinics, updateSelectedClinic]);
 
   return (
     <div className="space-y-8">
@@ -86,13 +80,11 @@ export const SchedulingStep = ({ onContinue }: SchedulingStepProps) => {
           Escolha o dia e o local de sua consulta
         </h2>
       </div>
-
       <div className="space-y-6">
         <div>
           <Label htmlFor="date" className="text-sm font-medium mb-2 block">
             Quando será a sua consulta?
           </Label>
-
           <div className="relative">
             <CalendarBlankIcon
               className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
@@ -106,14 +98,12 @@ export const SchedulingStep = ({ onContinue }: SchedulingStepProps) => {
               min={new Date().toISOString().split('T')[0]}
             />
           </div>
-
           {errors.date && (
             <p className="text-sm text-destructive mt-1">
               {errors.date.message}
             </p>
           )}
         </div>
-
         <div>
           <div className="relative">
             <ClockIcon
@@ -127,22 +117,19 @@ export const SchedulingStep = ({ onContinue }: SchedulingStepProps) => {
               className="pl-10"
             />
           </div>
-
           {errors.time && (
             <p className="text-sm text-destructive mt-1">
               {errors.time.message}
             </p>
           )}
         </div>
-
         <div>
           <Label className="text-sm font-medium mb-3 block">Onde?</Label>
-
           {!watchDate || !watchTime ? (
             <div className="text-sm text-muted-foreground">
               Selecione data e horário para ver clínicas disponíveis
             </div>
-          ) : loading ? (
+          ) : loadingClinics ? (
             <div className="flex items-center gap-2 text-muted-foreground">
               <CircleNotchIcon className="animate-spin" size={20} />
               <span>Aguarde... estamos buscando as clínicas disponíveis</span>
@@ -182,7 +169,6 @@ export const SchedulingStep = ({ onContinue }: SchedulingStepProps) => {
               ))}
             </div>
           )}
-
           {errors.clinicId && (
             <p className="text-sm text-destructive mt-1">
               {errors.clinicId.message}
@@ -190,9 +176,14 @@ export const SchedulingStep = ({ onContinue }: SchedulingStepProps) => {
           )}
         </div>
       </div>
-
       <div className="flex justify-end gap-3 pt-6">
-        <Button onClick={handleContinue} disabled={!isValid} size="lg">
+        <Button
+          onClick={() =>
+            handleContinue(watchDate, watchTime, selectedClinic!, onContinue)
+          }
+          disabled={!isValid}
+          size="lg"
+        >
           Continuar
         </Button>
       </div>
