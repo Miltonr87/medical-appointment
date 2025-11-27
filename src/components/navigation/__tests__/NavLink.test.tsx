@@ -3,7 +3,6 @@ import { vi } from 'vitest';
 
 import { NavLink } from '../NavLink';
 
-// Mock next/navigation usePathname
 vi.mock('next/navigation', () => ({
   usePathname: () => '/dashboard',
 }));
