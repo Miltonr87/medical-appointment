@@ -1,6 +1,6 @@
 'use client';
 
-import { Sidebar } from '@/components/Sidebar';
+import { Sidebar } from '@/components/navigation/Sidebar';
 import { SchedulingStep } from '@/components/steps/SchedulingStep';
 import { DoctorStep } from '@/components/steps/DoctorStep';
 import { PaymentStep } from '@/components/steps/PaymentStep';

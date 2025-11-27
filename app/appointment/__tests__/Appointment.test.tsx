@@ -8,7 +8,7 @@ vi.mock('@/hooks/appointment/useCurrentStep', () => ({
 
 import { useCurrentStep } from '@/hooks/appointment/useCurrentStep';
 
-vi.mock('@/components/Sidebar', () => ({
+vi.mock('@/components/navigation/Sidebar', () => ({
   Sidebar: ({ currentStep }: { currentStep: number }) => (
     <div data-testid="sidebar">Sidebar step {currentStep}</div>
   ),
