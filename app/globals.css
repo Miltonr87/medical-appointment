@@ -1,5 +1,21 @@
 @import 'tailwindcss';
 
+@theme {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-border: hsl(var(--border));
+}
+
 @layer base {
   :root {
     --background: 210 20% 98%;
@@ -15,42 +31,24 @@
     --accent-foreground: 221 80% 30%;
 
     --secondary: 210 15% 94%;
-    :root {
-      --background: 210 20% 98%;
-      --foreground: 215 28% 17%;
+    --secondary-foreground: 215 28% 17%;
 
-      --card: 0 0% 100%;
-      --card-foreground: 215 28% 17%;
+    --muted: 210 15% 94%;
+    --muted-foreground: 215 15% 50%;
 
-      --primary: 221 89% 60%;
-      --primary-foreground: 0 0% 100%;
+    --border: 215 15% 88%;
 
-      --accent: 219 100% 82%;
-      --accent-foreground: 221 80% 30%;
+    --radius: 0.75rem;
+  }
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    border-color: hsl(var(--border));
+  }
 
-      --secondary: 210 15% 94%;
-      --secondary-foreground: 215 28% 17%;
-
-      --muted: 210 15% 94%;
-      --muted-foreground: 215 15% 50%;
-
-      --border: 215 15% 88%;
-
-      --radius: 0.75rem;
-
-      --color-background: hsl(var(--background));
-      --color-foreground: hsl(var(--foreground));
-      --color-card: hsl(var(--card));
-      --color-card-foreground: hsl(var(--card-foreground));
-      --color-primary: hsl(var(--primary));
-      --color-primary-foreground: hsl(var(--primary-foreground));
-      --color-secondary: hsl(var(--secondary));
-      --color-secondary-foreground: hsl(var(--secondary-foreground));
-      --color-accent: hsl(var(--accent));
-      --color-accent-foreground: hsl(var(--accent-foreground));
-      --color-muted: hsl(var(--muted));
-      --color-muted-foreground: hsl(var(--muted-foreground));
-      --color-border: hsl(var(--border));
-    }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: 'liga' 1, 'kern' 1;
   }
 }
