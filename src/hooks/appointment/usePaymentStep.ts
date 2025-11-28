@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, startTransition } from 'react';
 import { useAppointmentStore } from '@/store/appointmentStore';
 
 export const usePaymentStep = () => {
@@ -9,9 +9,12 @@ export const usePaymentStep = () => {
         'pix' | 'credit-card' | 'cash' | undefined
     >(undefined);
 
+    // ✅ Correção definitiva: sincronização usando transition
     useEffect(() => {
-        if (paymentMethodStore) {
-            setSelectedMethod(paymentMethodStore);
+        if (paymentMethodStore != null) {
+            startTransition(() => {
+                setSelectedMethod(paymentMethodStore);
+            });
         }
     }, [paymentMethodStore]);
 

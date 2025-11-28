@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, startTransition } from 'react';
 import { mockApi } from '@/lib/mockApi';
 import { useAppointmentStore } from '@/store/appointmentStore';
 import type { Doctor } from '@/types/appointment.types';
@@ -20,8 +20,13 @@ export const useDoctorStep = () => {
         setLoadingDoctors(false);
     }, []);
 
+    // ⭐ CORREÇÃO DEFINITIVA: usar uma transition
     useEffect(() => {
-        if (doctor) setSelectedDoctor(doctor);
+        if (doctor != null) {
+            startTransition(() => {
+                setSelectedDoctor(doctor);
+            });
+        }
     }, [doctor]);
 
     const handleContinue = (next: () => void) => {
