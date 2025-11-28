@@ -3,11 +3,13 @@ import tsParser from '@typescript-eslint/parser';
 import tsPlugin from '@typescript-eslint/eslint-plugin';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
+import nextPlugin from 'eslint-plugin-next';
 
 export default [
   {
     ignores: ['node_modules/**', 'dist/**', 'coverage/**', '.next/**'],
   },
+
   {
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
@@ -20,6 +22,7 @@ export default [
       '@typescript-eslint': tsPlugin,
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
+      next: nextPlugin,
     },
     rules: {
       'no-unused-vars': 'off',
@@ -29,6 +32,8 @@ export default [
         'warn',
         { allowConstantExport: true },
       ],
+      'next/no-img-element': 'warn',
+      'next/no-html-link-for-pages': 'off',
     },
   },
   {
