@@ -9,7 +9,6 @@ export const usePaymentStep = () => {
         'pix' | 'credit-card' | 'cash' | undefined
     >(undefined);
 
-    // ✅ Correção definitiva: sincronização usando transition
     useEffect(() => {
         if (paymentMethodStore != null) {
             startTransition(() => {

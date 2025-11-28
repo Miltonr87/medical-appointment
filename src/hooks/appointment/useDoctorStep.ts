@@ -19,8 +19,6 @@ export const useDoctorStep = () => {
         setRecommendedDoctors(data.recommended);
         setLoadingDoctors(false);
     }, []);
-
-    // ⭐ CORREÇÃO DEFINITIVA: usar uma transition
     useEffect(() => {
         if (doctor != null) {
             startTransition(() => {
