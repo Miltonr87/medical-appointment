@@ -30,7 +30,6 @@ function mockMatchMedia(width: number) {
 
 describe('useIsMobile', () => {
     beforeEach(() => {
-        // Default viewport before each test
         mockMatchMedia(1024); // desktop
     });
 

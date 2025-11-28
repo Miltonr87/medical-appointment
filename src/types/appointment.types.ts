@@ -1,7 +1,5 @@
 // PAYMENT
 export type PaymentMethod = 'pix' | 'credit-card' | 'cash';
-
-// CLINIC
 export interface Clinic {
   id: string;
   name: string;
@@ -10,7 +8,6 @@ export interface Clinic {
   image: string;
 }
 
-// DOCTOR
 export interface Doctor {
   id: string;
   name: string;
